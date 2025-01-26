@@ -10,6 +10,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow factoryClass="org.jetbrains.plugins.template.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
+        <lang.structureViewExtension implementation="org.jetbrains.plugins.template.MyStructureViewExtension"/>
     </extensions>
 
     <applicationListeners>
