@@ -9,11 +9,11 @@
     <resource-bundle>messages.MyBundle</resource-bundle>
 
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.bukowa.template.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
-        <lang.structureViewExtension implementation="com.github.bukowa.template.MyStructureViewExtension"/>
+        <toolWindow factoryClass="com.github.bukowa.intellijstructureview1.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
+        <lang.structureViewExtension implementation="com.github.bukowa.intellijstructureview1.MyStructureViewExtension"/>
     </extensions>
 
     <applicationListeners>
-        <listener class="com.github.bukowa.template.listeners.MyApplicationActivationListener" topic="com.intellij.openapi.application.ApplicationActivationListener"/>
+        <listener class="com.github.bukowa.intellijstructureview1.listeners.MyApplicationActivationListener" topic="com.intellij.openapi.application.ApplicationActivationListener"/>
     </applicationListeners>
 </idea-plugin>
