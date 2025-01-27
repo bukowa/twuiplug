@@ -1,0 +1,3 @@
+[submodule "etwng"]
+	path = etwng
+	url = https://github.com/taw/etwng.git

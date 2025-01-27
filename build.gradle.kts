@@ -48,6 +48,8 @@ dependencies {
         zipSigner()
         testFramework(TestFrameworkType.Platform)
     }
+
+    implementation(libs.jruby)
 }
 
 // Configure IntelliJ Platform Gradle Plugin - read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-extension.html
@@ -154,4 +156,59 @@ intellijPlatformTesting {
             }
         }
     }
+}
+
+
+tasks.register("checkoutAndCopySubmodule") {
+    notCompatibleWithConfigurationCache("We are copying files from a submodule, which is not compatible with the configuration cache.")
+
+    doLast {
+        val submoduleDir = "etwng"
+        val commitHash = "9a6afbb3fac230b734ae888bde230517ceaeb1a5" // Replace with the specific commit hash
+        val resourcesDir = "src/main/resources/etwng"
+
+        // Checkout the specific commit in the submodule
+        println("Checking out submodule to commit $commitHash")
+        exec {
+            commandLine("git", "-C", submoduleDir, "checkout", commitHash)
+        }
+
+        // Define the list of specific files to copy
+        val filesToCopy = listOf(
+            "ui/lib/ui_builder.rb",
+            "ui/lib/xml2ui.rb",
+            "ui/lib/ui_file.rb",
+            "ui/lib/xml_builder.rb",
+            "ui/bin/xml2ui",
+            "ui/bin/ui2xml"
+        )
+
+        // Copy each specified file to the resources directory, preserving the same subdirectory structure
+        filesToCopy.forEach { filePath ->
+            val sourceFile = file("$submoduleDir/$filePath")
+            if (sourceFile.exists()) {
+                println("Copying $filePath to resources")
+
+                val targetFilePath = "$resourcesDir/$filePath" // Combine resourcesDir with the original file path
+                val targetDir = file(targetFilePath).parentFile
+
+                // Create necessary directories if they don't exist
+                targetDir.mkdirs()
+
+                // Copy the file to the target location while preserving the subdirectory structure
+                copy {
+                    from(sourceFile)
+                    into(targetDir)  // Copy into the directory, preserving the structure
+                }
+            } else {
+                println("$filePath not found in submodule.")
+            }
+        }
+    }
+}
+
+
+// Ensure build task depends on the checkoutAndCopySubmodule task
+tasks.register("prepare") {
+    dependsOn("checkoutAndCopySubmodule")
 }
