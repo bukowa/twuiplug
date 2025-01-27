@@ -10,11 +10,8 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow factoryClass="com.github.bukowa.intellijstructureview1.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
-        <lang.structureViewExtension implementation="com.github.bukowa.intellijstructureview1.MyStructureViewExtension"/>
         <xmlStructureViewElementProvider
                 implementation="com.github.bukowa.intellijstructureview1.MyCustomXmlStructureViewElementProvider"/>
-<!--        <itemPresentationProvider forClass="com.intellij.psi.impl.source.xml.XmlTagImpl" implementationClass="com.github.bukowa.intellijstructureview1.MyXmlTagImpl"/>-->
-<!--        <itemPresentationProvider forClass="com.intellij.ide.structureView.impl.xml.XmlTagTreeElement" implementationClass="com.github.bukowa.intellijstructureview1.MyXmlTagImpl"/>-->
 
     </extensions>
 

@@ -14,6 +14,7 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.ide.structureView.xml.XmlStructureViewElementProvider
+import com.intellij.ide.structureView.xml.XmlStructureViewBuilderProvider
 import com.intellij.psi.impl.source.tree.CompositeElement
 import com.intellij.psi.impl.source.xml.XmlElementImpl
 import com.intellij.psi.impl.source.xml.XmlTagImpl
@@ -99,70 +100,58 @@ class MyStructureViewExtension : StructureViewExtension {
     }
 }
 
-class MyStructureViewTreeElement : StructureViewTreeElement {
-    override fun getPresentation(): ItemPresentation {
-        return MyItemPresentation()
-    }
-
-    override fun getChildren(): Array<TreeElement> {
-        return arrayOf()
-    }
-
-    override fun getValue(): Any {
-        return this
-    }
-
-}
-
-class MyItemPresentation : ItemPresentation {
-    override fun getIcon(unused: Boolean) = AllIcons.Nodes.Test
-    override fun getPresentableText(): String {
-        return ""
-    }
-}
-
-class MyXmlTagImpl : ItemPresentationProvider<XmlTagImpl> {
-
-    override fun getPresentation(item: XmlTagImpl): ItemPresentation {
-
-        return PresentationData(
-            "asd",
-            item.containingFile.name,
-            item.getIcon(0),
-            null
-        )
-    }
-}
-
 class MyCustomXmlStructureViewElementProvider : XmlStructureViewElementProvider {
     override fun createCustomXmlTagTreeElement(p0: XmlTag): StructureViewTreeElement? {
         // Apply custom logic for specific tags
-        if (p0.name == "uientry") {
-            return MyCustomXmlTagTreeElement(p0)
-        }
+//        if (p0.name == "uientry") {
+        return MyCustomXmlTagTreeElement(p0)
+//        }
         // Return null for default handling of other tags
         return null
     }
 }
 
-class MyCustomXmlTagTreeElement(private val xmlTag: XmlTag) : StructureViewTreeElement {
-    override fun getValue(): Any = xmlTag
+class MyCustomXmlTagTreeElement(private val xmlTag: XmlTag) : XmlTagTreeElement(xmlTag) {
+    override fun getValue(): XmlTag? = xmlTag
 
     override fun getPresentation(): ItemPresentation {
         return object : ItemPresentation {
             override fun getPresentableText(): String {
+                val childrenCount = xmlTag.subTags.size
+
                 // Customize how the tag appears in the Structure View
-                return "<${xmlTag.name}> (i added this shit)"
+                if (xmlTag.name == "s"){
+                    return "<${xmlTag.name}> <${xmlTag.value.text}>"
+                }
+
+                // if tag named children show count
+                if (xmlTag.name == "children") {
+                    return "<${xmlTag.name}> ($childrenCount)"
+                }
+
+                return "<${xmlTag.name}>"
             }
 
             override fun getLocationString(): String? = xmlTag.containingFile.name
-            override fun getIcon(unused: Boolean): Icon? = null // Use a custom icon if desired
+            override fun getIcon(unused: Boolean): Icon? {
+                return null
+            } // Use a custom icon if desired
         }
     }
 
-    override fun getChildren(): Array<StructureViewTreeElement> {
-        // Recursively process children if needed
-        return xmlTag.subTags.map { MyCustomXmlTagTreeElement(it) }.toTypedArray()
+    override fun getChildrenBase(): Collection<StructureViewTreeElement?> {
+        val data = super.getChildrenBase()
+        val notAllowedNames = listOf("yes", "no", "byte", "i", "u")
+        return data.filter { it?.value !is XmlTagImpl || (it.value as XmlTagImpl).name !in notAllowedNames }
     }
+
+//    override fun getChildren(): Array<StructureViewTreeElement> {
+//        // Recursively process children if needed
+////        return emptyArray()
+//        val data = xmlTag.subTags.map { MyCustomXmlTagTreeElement(it) }.toTypedArray()
+//
+//    // ignore all tags that are: yes,no,byte
+//        return data.filter { it.getValue() !is XmlTagImpl || (it.getValue() as XmlTagImpl).name !in listOf("yes", "no", "byte", "i", "u") }.toTypedArray()
+//    }
 
 }
