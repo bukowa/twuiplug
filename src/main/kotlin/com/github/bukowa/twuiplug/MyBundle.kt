@@ -1,4 +1,4 @@
-package com.github.bukowa.intellijstructureview1
+package com.github.bukowa.twuiplug
 
 import com.intellij.DynamicBundle
 import org.jetbrains.annotations.NonNls

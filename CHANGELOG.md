@@ -1,6 +1,6 @@
 <!-- Keep a Changelog guide -> https://keepachangelog.com -->
 
-# intellij_structureview1 Changelog
+# twuiplug Changelog
 
 ## [Unreleased]
 ### Added

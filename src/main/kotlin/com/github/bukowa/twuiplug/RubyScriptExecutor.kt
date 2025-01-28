@@ -1,7 +1,6 @@
-package com.github.bukowa.intellijstructureview1.utils
+package com.github.bukowa.twuiplug.utils
 
 import com.intellij.util.ResourceUtil
-import com.jetbrains.rd.util.reflection.toPath
 import org.jruby.embed.ScriptingContainer
 
 object RubyScriptExecutor {

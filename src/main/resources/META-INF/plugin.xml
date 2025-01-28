@@ -1,7 +1,7 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>com.github.bukowa.intellijstructureview1</id>
-    <name>intellij_structureview1</name>
+    <id>com.github.bukowa.twuiplug</id>
+    <name>twuiplug</name>
     <vendor>bukowa</vendor>
 
     <depends>com.intellij.modules.platform</depends>
@@ -9,14 +9,14 @@
     <resource-bundle>messages.MyBundle</resource-bundle>
 
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.bukowa.intellijstructureview1.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
+        <toolWindow factoryClass="com.github.bukowa.twuiplug.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
         <xmlStructureViewElementProvider
-                implementation="com.github.bukowa.intellijstructureview1.MyCustomXmlStructureViewElementProvider"/>
+                implementation="com.github.bukowa.twuiplug.MyCustomXmlStructureViewElementProvider"/>
 
     </extensions>
 
 
     <applicationListeners>
-        <listener class="com.github.bukowa.intellijstructureview1.listeners.MyApplicationActivationListener" topic="com.intellij.openapi.application.ApplicationActivationListener"/>
+        <listener class="com.github.bukowa.twuiplug.listeners.MyApplicationActivationListener" topic="com.intellij.openapi.application.ApplicationActivationListener"/>
     </applicationListeners>
 </idea-plugin>

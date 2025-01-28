@@ -1,9 +1,9 @@
-package com.github.bukowa.intellijstructureview1.services
+package com.github.bukowa.twuiplug.services
 
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.thisLogger
 import com.intellij.openapi.project.Project
-import com.github.bukowa.intellijstructureview1.MyBundle
+import com.github.bukowa.twuiplug.MyBundle
 
 @Service(Service.Level.PROJECT)
 class MyProjectService(project: Project) {

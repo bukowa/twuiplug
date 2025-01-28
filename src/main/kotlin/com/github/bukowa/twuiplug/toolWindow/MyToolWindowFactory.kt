@@ -1,4 +1,4 @@
-package com.github.bukowa.intellijstructureview1.toolWindow
+package com.github.bukowa.twuiplug.toolWindow
 
 import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.thisLogger
@@ -8,8 +8,8 @@ import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.components.JBPanel
 import com.intellij.ui.content.ContentFactory
-import com.github.bukowa.intellijstructureview1.MyBundle
-import com.github.bukowa.intellijstructureview1.services.MyProjectService
+import com.github.bukowa.twuiplug.MyBundle
+import com.github.bukowa.twuiplug.services.MyProjectService
 import javax.swing.JButton
 
 

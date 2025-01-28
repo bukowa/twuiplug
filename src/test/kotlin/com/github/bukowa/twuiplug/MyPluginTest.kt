@@ -1,16 +1,11 @@
-package com.github.bukowa.intellijstructureview1
+package com.github.bukowa.twuiplug
 
-import com.intellij.ide.highlighter.XmlFileType
 import com.intellij.openapi.components.service
-import com.intellij.psi.xml.XmlFile
 import com.intellij.testFramework.TestDataPath
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import com.intellij.util.PsiErrorElementUtil
-import com.github.bukowa.intellijstructureview1.services.MyProjectService
-import com.github.bukowa.intellijstructureview1.utils.RubyScriptExecutor
+import com.github.bukowa.twuiplug.services.MyProjectService
+import com.github.bukowa.twuiplug.utils.RubyScriptExecutor
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.openapi.vfs.VirtualFileManager
-import com.intellij.testFramework.PsiTestUtil.addContentRoot
 import java.io.File
 import java.nio.file.Paths
 

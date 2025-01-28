@@ -1,4 +1,4 @@
-package com.github.bukowa.intellijstructureview1
+package com.github.bukowa.twuiplug
 
 import com.intellij.ide.structureView.StructureViewExtension
 import com.intellij.ide.structureView.StructureViewTreeElement

@@ -1,4 +1,4 @@
-package com.github.bukowa.intellijstructureview1.listeners
+package com.github.bukowa.twuiplug.listeners
 
 import com.intellij.openapi.application.ApplicationActivationListener
 import com.intellij.openapi.diagnostic.thisLogger
