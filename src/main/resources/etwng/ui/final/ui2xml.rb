@@ -1480,5 +1480,4 @@ result = UiFile.new(Pathname(java_input_path), Pathname(java_output_path)).call
 if result
   return result
 end
-return 0
-
+return "OK0"

@@ -357,4 +357,4 @@ ui = Xml2Ui.new(java_input_path).ui
 Pathname(java_output_path).parent.mkpath
 # returns number of bytes written
 ui.save! java_output_path
-
+return "OK0"
