@@ -1,22 +1,15 @@
 package com.github.bukowa.intellijstructureview1
 
-import com.intellij.icons.AllIcons
-import com.intellij.ide.projectView.PresentationData
 import com.intellij.ide.structureView.StructureViewExtension
 import com.intellij.ide.structureView.StructureViewTreeElement
 import com.intellij.ide.structureView.impl.xml.XmlTagTreeElement
-import com.intellij.ide.util.treeView.smartTree.TreeElement
+import com.intellij.ide.structureView.xml.XmlStructureViewElementProvider
 import com.intellij.navigation.ItemPresentation
-import com.intellij.navigation.ItemPresentationProvider
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
-import com.intellij.ide.structureView.xml.XmlStructureViewElementProvider
-import com.intellij.ide.structureView.xml.XmlStructureViewBuilderProvider
-import com.intellij.psi.impl.source.tree.CompositeElement
-import com.intellij.psi.impl.source.xml.XmlElementImpl
+import com.intellij.psi.PsiFile
 import com.intellij.psi.impl.source.xml.XmlTagImpl
 import com.intellij.psi.xml.XmlFile
 import com.intellij.psi.xml.XmlTag
@@ -107,7 +100,6 @@ class MyCustomXmlStructureViewElementProvider : XmlStructureViewElementProvider 
         return MyCustomXmlTagTreeElement(p0)
 //        }
         // Return null for default handling of other tags
-        return null
     }
 }
 
@@ -116,6 +108,7 @@ class MyCustomXmlTagTreeElement(private val xmlTag: XmlTag) : XmlTagTreeElement(
 
     override fun getPresentation(): ItemPresentation {
         return object : ItemPresentation {
+
             override fun getPresentableText(): String {
                 val childrenCount = xmlTag.subTags.size
 
@@ -132,10 +125,18 @@ class MyCustomXmlTagTreeElement(private val xmlTag: XmlTag) : XmlTagTreeElement(
                 return "<${xmlTag.name}>"
             }
 
-            override fun getLocationString(): String? = xmlTag.containingFile.name
-            override fun getIcon(unused: Boolean): Icon? {
-                return null
-            } // Use a custom icon if desired
+            override fun getIcon(p0: Boolean): Icon? {
+                val element: PsiElement? = xmlTag
+                if (element == null) {
+                    return null
+                } else {
+                    var flags = 2
+                    if (element !is PsiFile || !element.isWritable) {
+                        flags = flags or 1
+                    }
+                    return element.getIcon(flags)
+                }
+            }
         }
     }
 
