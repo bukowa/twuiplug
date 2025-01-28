@@ -4,6 +4,7 @@
     <name>twuiplug</name>
     <vendor>bukowa</vendor>
 
+
     <depends>com.intellij.modules.platform</depends>
 
     <resource-bundle>messages.MyBundle</resource-bundle>
@@ -19,4 +20,10 @@
     <applicationListeners>
         <listener class="com.github.bukowa.twuiplug.listeners.MyApplicationActivationListener" topic="com.intellij.openapi.application.ApplicationActivationListener"/>
     </applicationListeners>
+    <actions>
+        <action id="ConvertToXmlAction" class="ConvertToXmlAction" text="TW Convert">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
+    </actions>
 </idea-plugin>

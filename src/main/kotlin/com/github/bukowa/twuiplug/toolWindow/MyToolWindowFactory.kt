@@ -10,6 +10,10 @@ import com.intellij.ui.components.JBPanel
 import com.intellij.ui.content.ContentFactory
 import com.github.bukowa.twuiplug.MyBundle
 import com.github.bukowa.twuiplug.services.MyProjectService
+import com.intellij.openapi.fileChooser.FileChooser
+import com.intellij.openapi.fileChooser.FileChooserDescriptor
+import com.intellij.ui.components.JBTextField
+import com.jetbrains.JBRFileDialog
 import javax.swing.JButton
 
 
@@ -30,6 +34,7 @@ class MyToolWindowFactory : ToolWindowFactory {
     class MyToolWindow(toolWindow: ToolWindow) {
 
         private val service = toolWindow.project.service<MyProjectService>()
+        val project = toolWindow.project;
 
         fun getContent() = JBPanel<JBPanel<*>>().apply {
             val label = JBLabel(MyBundle.message("randomLabel", "?"))
@@ -37,7 +42,16 @@ class MyToolWindowFactory : ToolWindowFactory {
             add(label)
             add(JButton(MyBundle.message("shuffle")).apply {
                 addActionListener {
+                    val descriptor = FileChooserDescriptor(
+                        true,  // chooseFiles
+                        false, // chooseFolders
+                        false, // chooseJars
+                        false, // chooseJarsAsFiles
+                        false, // chooseJarContents
+                        false  // chooseMultiple
+                    )
                     label.text = MyBundle.message("randomLabel", service.getRandomNumber())
+                    val chooser = FileChooser.chooseFile(descriptor, project, null)
                 }
             })
         }
