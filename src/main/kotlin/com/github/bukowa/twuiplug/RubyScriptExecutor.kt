@@ -9,7 +9,8 @@ object RubyScriptExecutor {
 
     // path where jruby will find gems
     fun getJrubyGemsPath(): String {
-        val p = listOf<String>(ResourceUtil.getResource(this.javaClass.classLoader, "gemsjruby", "").path).first()
+        Thread.currentThread().contextClassLoader = this.javaClass.classLoader;
+        val p = listOf<String>(Thread.currentThread().contextClassLoader.getResource("gemsjruby").path).first()
         if (p == "") {
             throw Exception("cannot find gems path for jruby")
         }
