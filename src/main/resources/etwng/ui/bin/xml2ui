@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
-
+require "nokogiri"
+return 0
 require_relative "../lib/ui_builder"
 require_relative "../lib/xml2ui"
 require "pathname"
