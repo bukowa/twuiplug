@@ -4,6 +4,12 @@
 
 ## [Unreleased]
 
+## [0.0.2-beta] - 2025-01-30
+
+### Added
+
+- Description in README.md so project can be approved on Jetbrains Marketplace...
+
 ## [0.0.1-beta] - 2025-01-28
 
 This is a test release.
@@ -15,5 +21,6 @@ This is a test release.
 - Filtering structure view for xml files
 - File context menu xml -> bin button
 
-[Unreleased]: https://github.com/bukowa/twuiplug/compare/v0.0.1-beta...HEAD
+[Unreleased]: https://github.com/bukowa/twuiplug/compare/v0.0.2-beta...HEAD
+[0.0.2-beta]: https://github.com/bukowa/twuiplug/compare/v0.0.1-beta...v0.0.2-beta
 [0.0.1-beta]: https://github.com/bukowa/twuiplug/commits/v0.0.1-beta
