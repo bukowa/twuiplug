@@ -1,4 +1,4 @@
-package com.github.bukowa.twuiplug.utils
+package com.github.bukowa.twuiplug
 
 import com.intellij.util.ResourceUtil
 import org.jruby.embed.ScriptingContainer

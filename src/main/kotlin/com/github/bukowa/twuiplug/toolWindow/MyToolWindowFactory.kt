@@ -10,9 +10,10 @@ import com.intellij.openapi.fileChooser.FileChooser
 import com.intellij.openapi.fileChooser.FileChooserDescriptor
 import com.intellij.ui.components.JBTextField
 import javax.swing.JButton
-import javax.swing.BoxLayout
 import com.github.bukowa.twuiplug.settings.MyPluginSettings
 import com.intellij.openapi.components.service
+import net.miginfocom.swing.MigLayout
+import javax.swing.JPanel
 
 class MyToolWindowFactory : ToolWindowFactory {
 
@@ -29,57 +30,65 @@ class MyToolWindowFactory : ToolWindowFactory {
         private val project = toolWindow.project
         private val settings = project.service<MyPluginSettings>()
 
-        fun getContent() = JBPanel<JBPanel<*>>().apply {
-            layout = BoxLayout(this, BoxLayout.PAGE_AXIS)
+        private val exeTextField = JBTextField(settings.getExePath())
+        private val modsTextField = JBTextField(settings.getModsFolderPath())
+        private val outputTextField = JBTextField(settings.getOutPutPath())
 
-            // Path to rpfm_cli.exe
-            add(JBLabel("Path to rpfm_cli.exe:"))
-            val exeTextField = JBTextField(settings.getExePath())
-            add(exeTextField)
+        fun getContent(): JPanel {
+            return JBPanel<JBPanel<*>>().apply {
+                layout = MigLayout("fillx, insets 10")
 
-            add(JButton("Browse...").apply {
+                add(JBLabel("Path to rpfm_cli.exe:"), "wrap")
+                add(exeTextField, "growx, pushx, split 2")
+                add(createExeBrowseButton(), "wrap")
+
+                add(JBLabel("Build '.pack' file from directory:"), "wrap")
+                add(modsTextField, "growx, pushx, split 2")
+                add(createModsBrowseButton(), "wrap")
+
+                add(JBLabel("Save 'pack' file to:"), "wrap")
+                add(outputTextField, "growx, pushx, split 2")
+                add(createOutputBrowseButton(), "wrap")
+            }
+        }
+
+        private fun createExeBrowseButton(): JButton {
+            return JButton("Browse...").apply {
                 addActionListener {
                     val exeFileChooser = FileChooserDescriptor(true, false, false, false, false, false)
                     val exeFile = FileChooser.chooseFile(exeFileChooser, project, null)
                     exeFile?.let {
                         exeTextField.text = it.path
-                        settings.setExePath(it.path)  // Save to settings
+                        settings.setExePath(it.path) // Save to settings
                     }
                 }
-            })
+            }
+        }
 
-            // Path to mods folder
-            add(JBLabel("Build '.pack' file from directory:"))
-            val modsTextField = JBTextField(settings.getModsFolderPath())
-            add(modsTextField)
-
-            add(JButton("Browse...").apply {
+        private fun createModsBrowseButton(): JButton {
+            return JButton("Browse...").apply {
                 addActionListener {
                     val modsFolderChooser = FileChooserDescriptor(false, true, false, false, false, false)
                     val modsFolder = FileChooser.chooseFile(modsFolderChooser, project, null)
                     modsFolder?.let {
                         modsTextField.text = it.path
-                        settings.setModsFolderPath(it.path)  // Save to settings
+                        settings.setModsFolderPath(it.path) // Save to settings
                     }
                 }
-            })
+            }
+        }
 
-            // Path to output folder
-            add(JBLabel("Save 'pack' file to:"))
-            val outputTextField = JBTextField(settings.getOutPutPath())
-            add(outputTextField)
-
-            add(JButton("Browse...").apply {
+        private fun createOutputBrowseButton(): JButton {
+            return JButton("Browse...").apply {
                 addActionListener {
                     val outputFolderChooser = FileChooserDescriptor(false, true, false, false, false, false)
                     val outputFolder = FileChooser.chooseFile(outputFolderChooser, project, null)
                     outputFolder?.let {
                         outputTextField.text = it.path
-                        settings.setOutPutPath(it.path)  // Save to settings
+                        settings.setOutPutPath(it.path) // Save to settings
                     }
                 }
-            })
-
+            }
         }
     }
 }

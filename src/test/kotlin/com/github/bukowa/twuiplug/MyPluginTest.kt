@@ -4,7 +4,6 @@ import com.intellij.openapi.components.service
 import com.intellij.testFramework.TestDataPath
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.github.bukowa.twuiplug.services.MyProjectService
-import com.github.bukowa.twuiplug.utils.RubyScriptExecutor
 import com.intellij.openapi.vfs.VirtualFile
 import java.io.File
 import java.nio.file.Paths

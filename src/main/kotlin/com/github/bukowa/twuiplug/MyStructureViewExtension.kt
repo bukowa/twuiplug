@@ -4,15 +4,18 @@ import com.intellij.ide.structureView.StructureViewExtension
 import com.intellij.ide.structureView.StructureViewTreeElement
 import com.intellij.ide.structureView.impl.xml.XmlTagTreeElement
 import com.intellij.ide.structureView.xml.XmlStructureViewElementProvider
+import com.intellij.ide.util.treeView.smartTree.TreeElement
 import com.intellij.navigation.ItemPresentation
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.NlsSafe
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.impl.source.xml.XmlTagImpl
 import com.intellij.psi.xml.XmlFile
 import com.intellij.psi.xml.XmlTag
+import com.intellij.ui.treeStructure.Tree
 import com.intellij.util.concurrency.AppExecutorUtil
 import javax.swing.Icon
 
@@ -113,7 +116,7 @@ class MyCustomXmlTagTreeElement(private val xmlTag: XmlTag) : XmlTagTreeElement(
                 val childrenCount = xmlTag.subTags.size
 
                 // Customize how the tag appears in the Structure View
-                if (xmlTag.name == "s"){
+                if (xmlTag.name == "s") {
                     return "<${xmlTag.name}> <${xmlTag.value.text}>"
                 }
 
@@ -141,18 +144,72 @@ class MyCustomXmlTagTreeElement(private val xmlTag: XmlTag) : XmlTagTreeElement(
     }
 
     override fun getChildrenBase(): Collection<StructureViewTreeElement?> {
-        val data = super.getChildrenBase()
-        val notAllowedNames = listOf("yes", "no", "byte", "i", "u")
-        return data.filter { it?.value !is XmlTagImpl || (it.value as XmlTagImpl).name !in notAllowedNames }
+        val children = super.getChildrenBase()
+        val notAllowedNames = listOf("yes", "no")
+
+        // Create a new collection to hold the removed children
+        val removedChildren = mutableListOf<TreeElement>()
+
+        // Filter and collect elements with XmlTagImpl name "yes" or "no", and remove them from the original list
+        val filteredChildren = children.filterNot { child ->
+            (child as? MyCustomXmlTagTreeElement)?.xmlTag?.name in notAllowedNames && removedChildren.add(child)
+        }.toMutableList()  // Convert filteredChildren to a mutable list
+
+        // Now 'filteredChildren' contains all elements except those with the names "yes" or "no".
+        // 'removedChildren' contains all the elements that were removed.
+
+        if (removedChildren.isNotEmpty()) {
+            val x = MyTreeElement()
+            x.addChildren(removedChildren)
+            filteredChildren.add(0, x)
+        }
+
+        return filteredChildren
     }
 
-//    override fun getChildren(): Array<StructureViewTreeElement> {
-//        // Recursively process children if needed
-////        return emptyArray()
-//        val data = xmlTag.subTags.map { MyCustomXmlTagTreeElement(it) }.toTypedArray()
-//
-//    // ignore all tags that are: yes,no,byte
-//        return data.filter { it.getValue() !is XmlTagImpl || (it.getValue() as XmlTagImpl).name !in listOf("yes", "no", "byte", "i", "u") }.toTypedArray()
-//    }
+class MyTreeElement : StructureViewTreeElement {
+
+    // Initialize removedChildren with a mutable list
+    private var removedChildren: MutableCollection<TreeElement> = mutableListOf()
+
+    // Function to add new children to removedChildren
+    fun addChildren(children: Collection<TreeElement>) {
+        removedChildren.addAll(children)  // Adds all elements from 'children' collection
+    }
+
+    override fun getValue(): Any? {
+        // Return the value that represents this element
+        return "Some Value"  // For example, this could be any data you'd like to associate with this element
+    }
+
+    override fun getChildren(): Array<out TreeElement?> {
+        // Return a collection of child elements (or empty if none)
+        return removedChildren.toTypedArray()  // No children in this example, but you could return a list of child elements
+    }
+
+    override fun getPresentation(): ItemPresentation {
+        return object: ItemPresentation {
+            override fun getPresentableText(): @NlsSafe String? {
+                return "flags"
+            }
+            override fun getIcon(p0: Boolean): Icon? {
+                return null
+            }
+        }
+    }
+
+
+    override fun navigate(requestFocus: Boolean) {
+        // Define how this element should be navigated to, if necessary
+    }
+
+    override fun canNavigate(): Boolean {
+        return true  // This element is navigable
+    }
+
+    override fun canNavigateToSource(): Boolean {
+        return true  // This element can navigate to its source
+    }
+}
 
 }
