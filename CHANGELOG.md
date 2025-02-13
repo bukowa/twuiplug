@@ -4,6 +4,11 @@
 
 ## [Unreleased]
 
+### Added
+
+- bulk ui to xml and xml to ui conversion action
+- switch MyToolWindow layout to MigLayout for improved flexibility
+
 ## [0.0.2-beta] - 2025-01-30
 
 ### Added
