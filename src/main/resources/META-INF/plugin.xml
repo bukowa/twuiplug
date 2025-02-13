@@ -12,17 +12,34 @@
         <toolWindow factoryClass="com.github.bukowa.twuiplug.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
         <xmlStructureViewElementProvider
                 implementation="com.github.bukowa.twuiplug.MyCustomXmlStructureViewElementProvider"/>
-
+        <notificationGroup
+                id="com.github.bukowa.twuiplug"
+                displayType="BALLOON"
+                isLogByDefault="true"
+                toolWindowId="Event Log"/>
     </extensions>
 
 
     <applicationListeners>
-        <listener class="com.github.bukowa.twuiplug.listeners.MyApplicationActivationListener" topic="com.intellij.openapi.application.ApplicationActivationListener"/>
+        <listener class="com.github.bukowa.twuiplug.listeners.MyApplicationActivationListener"
+                  topic="com.intellij.openapi.application.ApplicationActivationListener"/>
     </applicationListeners>
+
+
     <actions>
-        <action id="ConvertToXmlAction" class="com.github.bukowa.twuiplug.actions.ConvertToXmlAction" text="TW Convert">
+        <group id="twuiplug" text="TWUIPLUG" popup="true">
             <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
-        </action>
+
+            <action id="ConvertToXmlAction"
+                    class="com.github.bukowa.twuiplug.actions.ConvertXmlToUIAction"
+                    text="XML -> UI">
+            </action>
+            <action id="ConvertToUIAction"
+                    class="com.github.bukowa.twuiplug.actions.ConvertUIToXmlAction"
+                    text="UI -> XML">
+            </action>
+        </group>
     </actions>
+
 </idea-plugin>
