@@ -33,7 +33,7 @@ open class ConvertUiFilesAction(
     filter: (VirtualFile) -> Boolean = { true },
   ) {
     @Suppress("UnsafeVfsRecursion")
-    if (file.isDirectory) file.children.forEach { collectFiles(it, files) }
+    if (file.isDirectory) file.children.forEach { collectFiles(it, files, filter) }
     else if (filter(file)) files += file
   }
 
