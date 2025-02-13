@@ -7,73 +7,159 @@ import com.intellij.notification.Notifications
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.progress.Task
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.vfs.VirtualFile
-import java.io.File
-import java.nio.file.Path
-import java.nio.file.Paths
+import com.intellij.openapi.vfs.VirtualFileManager
 
-private fun collectFiles(
+data class FilePathMapping(
+  val inputFile: VirtualFile,
+  val inputFilePath: String,
+  val outputFilePath: String,
+)
+
+open class ConvertUiFilesAction(
+  private var destinationPathFunc: (VirtualFile) -> String,
+  private var filterFileFunc: (VirtualFile) -> Boolean = { true },
+  private var action: (FilePathMapping) -> Unit,
+) : AnAction() {
+
+  private fun collectFiles(
     file: VirtualFile,
-    files: MutableList<VirtualFile>
-) {
+    files: MutableList<VirtualFile>,
+    filter: (VirtualFile) -> Boolean = { true },
+  ) {
     @Suppress("UnsafeVfsRecursion")
-    if (file.isDirectory) file.children.forEach {
-        collectFiles(it, files)
-    }
-    else files += file
-}
+    if (file.isDirectory) file.children.forEach { collectFiles(it, files) }
+    else if (filter(file)) files += file
+  }
 
-class ConvertToXmlAction : AnAction() {
+  override fun actionPerformed(event: AnActionEvent) {
 
-    override fun actionPerformed(event: AnActionEvent) {
-        val files = event.getData(CommonDataKeys.VIRTUAL_FILE_ARRAY)
+    val userSelectedFiles = event.getData(CommonDataKeys.VIRTUAL_FILE_ARRAY)
 
-        if (files.isNullOrEmpty()) Messages.showErrorDialog("Please select some files...", "Error")
-
-        val allFiles = mutableListOf<VirtualFile>()
-        files?.forEach { file -> collectFiles(file, allFiles) }
-
-        fun runCommandInBackground(command: String) {
-            ApplicationManager.getApplication().executeOnPooledThread {
-                println("Executing command: $command")
-                // Simulate task execution
-                Thread.sleep(1000)  // Simulating work (replace with actual command)
-                println("Command completed: $command")
-            }
-        }
-
-        files?.forEach { file -> runCommandInBackground(file.name) }
-        val task = MyBackgroundTask(event.project!!)
-        ProgressManager.getInstance().run(task)
-        return
+    // nothing selected, return
+    if (userSelectedFiles.isNullOrEmpty()) {
+      Messages.showErrorDialog("Please select some files...", "Error")
+      return
     }
 
-}
+    // collect files that are about to be processed
+    val allFiles = mutableListOf<VirtualFile>()
+    userSelectedFiles.forEach { collectFiles(it, allFiles, filterFileFunc) }
+    var filesToProcess = mutableListOf<FilePathMapping>()
 
+    // perform checks and collect properly
+    fileIteration@ for (file in allFiles) {
+      val destinationPath = destinationPathFunc(file)
+      val fileExists = file.fileSystem.findFileByPath(destinationPath) != null
 
-class MyBackgroundTask(project: Project) : Task.Backgroundable(project, "Running Command") {
-
-    override fun run(indicator: ProgressIndicator) {
-        val commands = listOf("command1", "command2", "command3")
-
-        // Simulate running multiple commands with progress feedback
-        for ((index, command) in commands.withIndex()) {
-            if (indicator.isCanceled) return  // Check if the task was canceled
-
-            indicator.text = "Executing $command"
-            println("Executing command: $command")
-            Thread.sleep(1000)  // Simulate command execution
-            println("Command completed: $command")
-            indicator.fraction = (index + 1) / commands.size.toDouble()  // Update progress
-            Notifications.Bus.notify(
-                Notification("com.github.bukowa.twuiplug", "error1", "error2", NotificationType.ERROR),
+      when (fileExists) {
+        true -> {
+          val choice =
+            Messages.showDialog(
+              "$destinationPath already exists. Override?",
+              "Override?",
+              arrayOf("Override", "Override All", "Skip", "Cancel"),
+              0,
+              Messages.getWarningIcon(),
+              null,
             )
+
+          when (choice) {
+            0 -> {
+              filesToProcess += FilePathMapping(file, file.path, destinationPath)
+            }
+            1 -> {
+              filesToProcess =
+                allFiles
+                  .map { FilePathMapping(it, it.path, destinationPathFunc(it)) }
+                  .toMutableList()
+              break@fileIteration
+            }
+            2 -> continue
+            else -> return
+          }
         }
+        false -> {
+          filesToProcess += FilePathMapping(file, file.path, destinationPath)
+        }
+      }
     }
+
+    ProgressManager.getInstance()
+      .run(FileProcessingTask(event.project!!, filesToProcess, action))
+    return
+  }
+}
+
+class ConvertXmlToUIAction :
+  ConvertUiFilesAction(
+    destinationPathFunc = { file ->
+      "${file.parent.path}/${file.nameWithoutExtension}"
+    },
+    filterFileFunc = { file -> file.extension == "xml" },
+    action = { fileMapping ->
+      RubyScriptExecutor.executeXml2UiScript(
+        fileMapping.inputFilePath,
+        fileMapping.outputFilePath,
+      )
+    },
+  )
+
+class ConvertUIToXmlAction :
+  ConvertUiFilesAction(
+    destinationPathFunc = { file ->
+      "${file.parent.path}/${file.nameWithoutExtension}.xml"
+    },
+    filterFileFunc = { file -> file.extension == null },
+    action = { fileMapping ->
+      RubyScriptExecutor.executeUi2XmlScript(
+        fileMapping.inputFilePath,
+        fileMapping.outputFilePath,
+      )
+    },
+  )
+
+class FileProcessingTask(
+  project: Project,
+  private val files: List<FilePathMapping>,
+  private val action: (FilePathMapping) -> Unit,
+) : Task.Backgroundable(project, "Processing files") {
+
+  override fun run(indicator: ProgressIndicator) {
+    if (files.isEmpty()) return
+
+    for ((index, file) in files.withIndex()) {
+      if (indicator.isCanceled) return // Check if the task was canceled
+
+      indicator.text = "Processing file: ${file.inputFilePath}"
+      try {
+        action(file)
+        Notifications.Bus.notify(
+          Notification(
+            "com.github.bukowa.twuiplug",
+            "File processed",
+            "File ${file.inputFilePath} processed successfully",
+            NotificationType.INFORMATION,
+          )
+        )
+      } catch (e: Exception) {
+        Notifications.Bus.notify(
+          Notification(
+            "com.github.bukowa.twuiplug",
+            "File processing error",
+            "Error processing file: ${file.inputFilePath}. Details: ${e.message}",
+            NotificationType.ERROR,
+          )
+        )
+      }
+      indicator.fraction = (index + 1) / files.size.toDouble() // Update progress
+    }
+
+    VirtualFileManager.getInstance().asyncRefresh()
+  }
 }
