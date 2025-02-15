@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- filter out some usless tags in the structure view for cleaner view
+
 ## [0.1.0] - 2025-02-14
 
 ### Added
