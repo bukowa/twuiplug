@@ -152,6 +152,11 @@ class MyCustomXmlTagTreeElement(private val xmlTag: XmlTag) : XmlTagTreeElement(
           return "state: <${xmlTag.subTags.firstOrNull()?.value?.text ?: ""}>"
         }
 
+        // if element is additional_data and has type other than none
+        if (xmlTag.name == "additional_data") {
+             return "additional_data: <${xmlTag.getAttributeValue("type")}>"
+        }
+
         return "<${xmlTag.name}>"
       }
 
