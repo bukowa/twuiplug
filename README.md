@@ -54,7 +54,7 @@ repository](https://github.com/bukowa/twuiplug).
 
 - Using JetBrains Marketplace:
 
-  Go to [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/MARKETPLACE_ID) and install it by clicking
+  Go to [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/26431) and install it by clicking
   the <kbd>Install to ...</kbd> button in case your IDE is running.
 
   You can also download the [latest release](https://plugins.jetbrains.com/plugin/26431/versions) from JetBrains
