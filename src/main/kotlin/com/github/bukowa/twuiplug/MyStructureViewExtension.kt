@@ -1,5 +1,6 @@
 package com.github.bukowa.twuiplug
 
+import com.intellij.icons.AllIcons
 import com.intellij.ide.structureView.StructureViewExtension
 import com.intellij.ide.structureView.StructureViewTreeElement
 import com.intellij.ide.structureView.impl.xml.XmlTagTreeElement
@@ -9,6 +10,7 @@ import com.intellij.navigation.ItemPresentation
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.IconLoader.getIcon
 import com.intellij.openapi.util.NlsSafe
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
@@ -120,6 +122,20 @@ class MyCustomXmlTagTreeElement(private val xmlTag: XmlTag) : XmlTagTreeElement(
       )
   }
 
+  interface StructureIcons {
+    companion object {
+      val UI: Icon = AllIcons.Nodes.HomeFolder
+      val UIEntry: Icon =  getIcon("/icons/uientry.svg", StructureIcons::class.java)
+      val Children: Icon = getIcon("/icons/children.svg", StructureIcons::class.java)
+      val States: Icon = getIcon("/icons/states.svg", StructureIcons::class.java)
+      val State: Icon = getIcon("/icons/state.svg", StructureIcons::class.java)
+      val Images: Icon =  getIcon("/icons/images.svg", StructureIcons::class.java)
+      val Image: Icon = getIcon("/icons/image.svg", StructureIcons::class.java)
+      val Properties: Icon = getIcon("/icons/properties.svg", StructureIcons::class.java)
+      val Property: Icon = getIcon("/icons/property.svg", StructureIcons::class.java)
+    }
+  }
+
   override fun getPresentation(): ItemPresentation {
     return object : ItemPresentation {
 
@@ -164,7 +180,19 @@ class MyCustomXmlTagTreeElement(private val xmlTag: XmlTag) : XmlTagTreeElement(
           if (element !is PsiFile || !element.isWritable) {
             flags = flags or 1
           }
-          return element.getIcon(flags)
+
+            return when (xmlTag.name) {
+                "ui" -> StructureIcons.UI
+                "uientry" -> StructureIcons.UIEntry
+                "children" -> StructureIcons.Children
+                "states" -> StructureIcons.States
+                "state" -> StructureIcons.State
+                "images", "image_uses" -> StructureIcons.Images
+                "image", "image_use" -> StructureIcons.Image
+                "properties" -> StructureIcons.Properties
+                "property" -> StructureIcons.Property
+                else -> element.getIcon(flags)
+            }
         }
       }
     }
