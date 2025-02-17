@@ -7,6 +7,7 @@
 ### Added
 
 - show additional_data type
+- add icons for structure view
 
 ## [0.2.0] - 2025-02-15
 
