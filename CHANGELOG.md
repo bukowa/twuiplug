@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- show additional_data type
+
 ## [0.2.0] - 2025-02-15
 
 ### Added
