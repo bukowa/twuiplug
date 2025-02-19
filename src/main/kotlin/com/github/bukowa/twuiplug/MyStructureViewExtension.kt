@@ -106,8 +106,8 @@ class MyCustomXmlStructureViewElementProvider : XmlStructureViewElementProvider 
   }
 }
 
-class MyCustomXmlTagTreeElement(private val xmlTag: XmlTag) : XmlTagTreeElement(xmlTag) {
-  override fun getValue(): XmlTag? = xmlTag
+class MyCustomXmlTagTreeElement(private val tag: XmlTag) : XmlTagTreeElement(tag) {
+  override fun getValue(): XmlTag? = tag
 
   private companion object {
     private val countableElements =
@@ -141,56 +141,56 @@ class MyCustomXmlTagTreeElement(private val xmlTag: XmlTag) : XmlTagTreeElement(
 
       @Suppress("RemoveSingleExpressionStringTemplate")
       override fun getPresentableText(): String {
-        val childrenCount = xmlTag.subTags.size
+        val childrenCount = tag.subTags.size
 
-        if (xmlTag.name == "ui") {
+        if (tag.name == "ui") {
           return "<ui>"
         }
 
         // Customize how the tag appears in the Structure View
-        if (xmlTag.name == "s") {
-          return "<${xmlTag.value.text}>"
+        if (tag.name == "s") {
+          return "<${tag.value.text}>"
         }
 
         // if tag named in countable print with count
-        if (xmlTag.name in countableElements) {
-          return "($childrenCount): <${xmlTag.name}>"
+        if (tag.name in countableElements) {
+          return "($childrenCount): <${tag.name}>"
         }
 
         // TITLE FILTER
         // if tag named uientry get first child "s" value if not empty
-        if (xmlTag.name == "uientry") {
-          return "uientry: <${xmlTag.subTags.firstOrNull { it.name == "s" }?.value?.text ?: ""}>"
+        if (tag.name == "uientry") {
+          return "uientry: <${tag.subTags.firstOrNull { it.name == "s" }?.value?.text ?: ""}>"
         }
 
-        if (xmlTag.name == "image") {
+        if (tag.name == "image") {
           return "image: ${
-            xmlTag.subTags.getOrNull(1)
+            tag.subTags.getOrNull(1)
               ?.takeIf { it.name == "s" }?.value?.text?: "?"
           }"
         }
 
-        if (xmlTag.name == "state") {
+        if (tag.name == "state") {
           return "state: ${
-            xmlTag.subTags.getOrNull(1)
+            tag.subTags.getOrNull(1)
               ?.takeIf { it.name == "s" }?.value?.text ?: "?"
           }"
         }
 
         // if element is additional_data and has type other than none
-        if (xmlTag.name == "additional_data") {
-          return "additional_data: <${xmlTag.getAttributeValue("type")}>"
+        if (tag.name == "additional_data") {
+          return "additional_data: <${tag.getAttributeValue("type")}>"
         }
 
-        if (xmlTag.name == "i" && xmlTag.parentTag!!.name == "image") {
-          return "${xmlTag.value.text}"
+        if (tag.name == "i" && tag.parentTag!!.name == "image") {
+          return "${tag.value.text}"
         }
 
-        return "<${xmlTag.name}>"
+        return "<${tag.name}>"
       }
 
       override fun getIcon(p0: Boolean): Icon? {
-        val element: PsiElement? = xmlTag
+        val element: PsiElement? = tag
         if (element == null) {
           return null
         } else {
@@ -199,7 +199,7 @@ class MyCustomXmlTagTreeElement(private val xmlTag: XmlTag) : XmlTagTreeElement(
             flags = flags or 1
           }
 
-            return when (xmlTag.name) {
+            return when (tag.name) {
                 "ui" -> StructureIcons.UI
                 "uientry" -> StructureIcons.UIEntry
                 "children" -> StructureIcons.Children
@@ -246,28 +246,28 @@ class MyCustomXmlTagTreeElement(private val xmlTag: XmlTag) : XmlTagTreeElement(
     //        }
 
     fun removeiIfParentNotImage(element: MyCustomXmlTagTreeElement): Boolean {
-      return element.xmlTag.name == "i" && element.xmlTag.parentTag!!.name != "image"
+      return element.tag.name == "i" && element.tag.parentTag!!.name != "image"
     }
 
     fun filterByNameAndValue(element: MyCustomXmlTagTreeElement): Boolean {
-      return element.xmlTag.name == "s" &&
-        (element.xmlTag.value.text.isEmpty() || element.xmlTag.value.text == "normal_t0")
+      return element.tag.name == "s" &&
+        (element.tag.value.text.isEmpty() || element.tag.value.text == "normal_t0")
     }
 
     fun filterByEmptyCountable(element: MyCustomXmlTagTreeElement): Boolean {
-      return element.xmlTag.name in countableElements && element.xmlTag.subTags.size == 0
+      return element.tag.name in countableElements && element.tag.subTags.size == 0
     }
 
     // TITLE FILTER
     fun filterTitleIfNotEmptyAndFirstchild(element: MyCustomXmlTagTreeElement): Boolean {
-      return element.xmlTag.name == "s" &&
-        element.xmlTag.parentTag?.subTags?.get(1) == element.xmlTag
+      return element.tag.name == "s" &&
+        element.tag.parentTag?.subTags?.get(1) == element.tag
     }
 
     // if additional data prop type == none
     fun filterAdditionalData(element: MyCustomXmlTagTreeElement): Boolean {
-      return element.xmlTag.name == "additional_data" &&
-        element.xmlTag.getAttributeValue("type") == "none"
+      return element.tag.name == "additional_data" &&
+        element.tag.getAttributeValue("type") == "none"
     }
 
     // todo use xml comment
@@ -286,7 +286,7 @@ class MyCustomXmlTagTreeElement(private val xmlTag: XmlTag) : XmlTagTreeElement(
       )
 
     fun filterFont(element: MyCustomXmlTagTreeElement): Boolean {
-      return element.xmlTag.name == "s" && element.xmlTag.value.text in fontValues
+      return element.tag.name == "s" && element.tag.value.text in fontValues
     }
 
     val customFilters: List<(MyCustomXmlTagTreeElement) -> Boolean> =
@@ -305,7 +305,7 @@ class MyCustomXmlTagTreeElement(private val xmlTag: XmlTag) : XmlTagTreeElement(
         val customElement = child as? MyCustomXmlTagTreeElement ?: return@filterNot false
 
         // Base check - filter by name
-        if (customElement.xmlTag.name in notAllowedNames2) return@filterNot true
+        if (customElement.tag.name in notAllowedNames2) return@filterNot true
 
         // Check against all additional predicates
         customFilters.any { filter -> filter(customElement) }
