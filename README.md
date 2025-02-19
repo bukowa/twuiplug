@@ -42,6 +42,8 @@ repository](https://github.com/bukowa/twuiplug).
   - ![](./readme/usagex.png)
 3. Make sure to check these settings in structure view:
   - ![](readme/imgx.png)
+4. Make sure you disabled grammar check for XML files (unless you like crazy CPU usage):
+  - ![](readme/grammar.png)
 
 ## Some old gif
   - ![](./readme/gif1.gif)
@@ -80,3 +82,6 @@ com.intellij.openapi.actionSystem.AnAction:all
 com.intellij.openapi.actionSystem.AnActionEvent:all
 com.intellij.openapi.actionSystem.impl.Utils:all
 ```
+
+#### TODO
+- inform user if he has XML grammar enabled
