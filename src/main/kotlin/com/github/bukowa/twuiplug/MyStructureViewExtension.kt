@@ -147,6 +147,14 @@ class MyCustomXmlTagTreeElement(private val tag: XmlTag) : XmlTagTreeElement(tag
           return "<ui>"
         }
 
+        when (tag.name) {
+          "property" ->  {
+            return "property" +
+                    ": ${tag.subTags.getOrNull(0)?.value?.text} " +
+                    ": ${tag.subTags.getOrNull(1)?.value?.text}"
+          }
+        }
+
         // Customize how the tag appears in the Structure View
         if (tag.name == "s") {
           return "<${tag.value.text}>"
