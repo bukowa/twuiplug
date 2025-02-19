@@ -139,8 +139,13 @@ class MyCustomXmlTagTreeElement(private val xmlTag: XmlTag) : XmlTagTreeElement(
   override fun getPresentation(): ItemPresentation {
     return object : ItemPresentation {
 
+      @Suppress("RemoveSingleExpressionStringTemplate")
       override fun getPresentableText(): String {
         val childrenCount = xmlTag.subTags.size
+
+        if (xmlTag.name == "ui") {
+          return "<ui>"
+        }
 
         // Customize how the tag appears in the Structure View
         if (xmlTag.name == "s") {
@@ -158,19 +163,27 @@ class MyCustomXmlTagTreeElement(private val xmlTag: XmlTag) : XmlTagTreeElement(
           return "uientry: <${xmlTag.subTags.firstOrNull { it.name == "s" }?.value?.text ?: ""}>"
         }
 
-        // if element named image and first child is <u> show its id
-        if (xmlTag.name == "image" && xmlTag.subTags.firstOrNull()?.name == "u") {
-          return "image: <${xmlTag.subTags.firstOrNull()?.value?.text ?: ""}>"
+        if (xmlTag.name == "image") {
+          return "image: ${
+            xmlTag.subTags.getOrNull(1)
+              ?.takeIf { it.name == "s" }?.value?.text?: "?"
+          }"
         }
 
-        // if element named state and first child is <u> show its id
-        if (xmlTag.name == "state" && xmlTag.subTags.firstOrNull()?.name == "u") {
-          return "state: <${xmlTag.subTags.firstOrNull()?.value?.text ?: ""}>"
+        if (xmlTag.name == "state") {
+          return "state: ${
+            xmlTag.subTags.getOrNull(1)
+              ?.takeIf { it.name == "s" }?.value?.text ?: "?"
+          }"
         }
 
         // if element is additional_data and has type other than none
         if (xmlTag.name == "additional_data") {
-             return "additional_data: <${xmlTag.getAttributeValue("type")}>"
+          return "additional_data: <${xmlTag.getAttributeValue("type")}>"
+        }
+
+        if (xmlTag.name == "i" && xmlTag.parentTag!!.name == "image") {
+          return "${xmlTag.value.text}"
         }
 
         return "<${xmlTag.name}>"
@@ -208,7 +221,7 @@ class MyCustomXmlTagTreeElement(private val xmlTag: XmlTag) : XmlTagTreeElement(
     //        val notAllowedNames = listOf("yes", "no")
 
     val notAllowedNames2 =
-      listOf("i", "unicode", "byte", "u", "color", "flt", "yes", "no", "normal_t0")
+      listOf("unicode", "byte", "u", "color", "flt", "yes", "no", "normal_t0")
 
     // Create a new collection to hold the removed children
     //        val removedChildren = mutableListOf<TreeElement>()
@@ -231,6 +244,10 @@ class MyCustomXmlTagTreeElement(private val xmlTag: XmlTag) : XmlTagTreeElement(
     //            x.addChildren(removedChildren)
     //            filteredChildren.add(0, x)
     //        }
+
+    fun removeiIfParentNotImage(element: MyCustomXmlTagTreeElement): Boolean {
+      return element.xmlTag.name == "i" && element.xmlTag.parentTag!!.name != "image"
+    }
 
     fun filterByNameAndValue(element: MyCustomXmlTagTreeElement): Boolean {
       return element.xmlTag.name == "s" &&
@@ -265,7 +282,7 @@ class MyCustomXmlTagTreeElement(private val xmlTag: XmlTag) : XmlTagTreeElement(
         "la_gioconda_uppercase",
         "georgia_italic",
         "fe_italic",
-        "la_gioconda"
+        "la_gioconda",
       )
 
     fun filterFont(element: MyCustomXmlTagTreeElement): Boolean {
@@ -279,6 +296,7 @@ class MyCustomXmlTagTreeElement(private val xmlTag: XmlTag) : XmlTagTreeElement(
         ::filterTitleIfNotEmptyAndFirstchild,
         ::filterAdditionalData,
         ::filterFont,
+        ::removeiIfParentNotImage,
       )
 
     return children
