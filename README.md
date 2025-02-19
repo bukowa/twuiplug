@@ -40,6 +40,8 @@ repository](https://github.com/bukowa/twuiplug).
   - ![img.png](./readme/usage1.png)
 2. Open built-in structure view:
   - ![](./readme/usagex.png)
+3. Make sure to check these settings in structure view:
+  - ![](readme/imgx.png)
 
 ## Some old gif
   - ![](./readme/gif1.gif)
