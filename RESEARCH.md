@@ -10,3 +10,8 @@
     ```
     <!-- uientry flag 4 -->
     ```
+
+- turn visibilty of state text on/off
+  ```
+  <!-- state stuff 4? -->
+  ```
