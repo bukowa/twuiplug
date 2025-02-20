@@ -4,6 +4,11 @@
 
 ## [Unreleased]
 
+### Added
+
+- rome2: display prop values
+- rome2: improve state and image display
+
 ## [0.3.0] - 2025-02-17
 
 ### Added
