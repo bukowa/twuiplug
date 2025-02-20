@@ -1,4 +1,4 @@
-
+Take anything in this documentation as "probably":
 
 
 - visible on/off
@@ -11,7 +11,9 @@
     <!-- uientry flag 4 -->
     ```
 
-- turn visibilty of state text on/off
+- turn visibilty of state text on/off ? 
+  
+  this is required to be set to yes if you want to change state text otherwise its "dy"
   ```
   <!-- state stuff 4? -->
   ```
