@@ -15,3 +15,14 @@
   ```
   <!-- state stuff 4? -->
   ```
+
+- sets(probably) interactivity of state
+  ```
+  <s>Default Font Category</s><!-- font category / twui -->
+  <i>0</i><!-- left ? -->
+  <i>0</i><!-- right ? -->
+  <i>0</i><!-- top ? -->
+  <i>0</i><!-- bottom ? -->
+  <i>0</i>
+  <yes />                      <<<<<<<<<<<<<<<<<<<<<<<<<<<<<< this one   
+  ```
