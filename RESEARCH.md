@@ -28,3 +28,9 @@ Take anything in this documentation as "probably":
   <i>0</i>
   <yes />                      <<<<<<<<<<<<<<<<<<<<<<<<<<<<<< this one   
   ```
+
+- some kind of size based behaviour based on children or parent?
+  can make the element shorter or wider
+  ```
+  <no /><!-- uientry flag 1 -->
+  ```
