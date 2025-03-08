@@ -34,3 +34,9 @@ Take anything in this documentation as "probably":
   ```
   <no /><!-- uientry flag 1 -->
   ```
+
+- when minimizing also minimizes all children?
+  does not allow children to overflow parent?
+  ```
+  <no /><!-- uientry flag 9 -->
+  ```
