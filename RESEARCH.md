@@ -40,3 +40,11 @@ Take anything in this documentation as "probably":
   ```
   <no /><!-- uientry flag 9 -->
   ```
+
+- makes parent resize to fit this component (if set to yes and 1)
+  this for ex. I used in changing main menu campaign buttons for factions to fit 
+  ```
+  <yes /><!-- uientry flag 2 -->
+  <byte>1</byte><!-- uientry flag 3 -->
+  ```
+  
