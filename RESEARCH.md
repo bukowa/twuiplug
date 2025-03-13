@@ -47,4 +47,15 @@ Take anything in this documentation as "probably":
   <yes /><!-- uientry flag 2 -->
   <byte>1</byte><!-- uientry flag 3 -->
   ```
+
+- findings from `valerius` from dei discord channel
+  ```
+  the tags below font category are for padding
+  the tags below state text and tooltip govern alignment and has to take spesific value combinations (i.e. 4-4-0-2 for justify center)
+  entry flag 1 is horizontal resize
+  entry flag 2 is vertical resize
+  entry flag 9 is clip children
+  you are probably correct about interactivity flag (for attila it is a bit more confusing, takes values like 256 and 257 for disabling)
+  the boolean below ui entry 12 is localization related
   
+  ```
