@@ -48,6 +48,17 @@ Take anything in this documentation as "probably":
   <byte>1</byte><!-- uientry flag 3 -->
   ```
 
+- `HorizontalList`
+  ```
+  - <i>5</i><!-- mystery4 --> <<<<<<< number of rows
+  ```
+
+- `List`
+  ```
+  - <i>10</i><!-- mystery4 --> <<<<<<<<<< number of columns
+  ```
+
+
 - findings from `valerius` from dei discord channel
   ```
   the tags below font category are for padding
