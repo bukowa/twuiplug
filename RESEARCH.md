@@ -70,6 +70,13 @@ Take anything in this documentation as "probably":
   ```
   - <i>10</i><!-- mystery4 --> <<<<<<<<<< number of columns
   ```
+- defines number of columns and their width
+  ```
+    <i>3</i><!-- count data points -->
+    <flt>220.0</flt><!-- data point -->
+    <flt>120.0</flt><!-- data point -->
+    <flt>158.0</flt><!-- data point -->
+  ```
 
 
 - findings from `valerius` from dei discord channel
