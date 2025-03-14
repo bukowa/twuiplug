@@ -70,3 +70,9 @@ Take anything in this documentation as "probably":
   the boolean below ui entry 12 is localization related
   
   ```
+
+- this when removed on encyclopedia building info adds strange glow around edges of the window
+  ```
+  <flt>10.0</flt><!-- margin top-bottom? -->
+  <flt>10.0</flt><!-- margin left-right? -->
+  ```
