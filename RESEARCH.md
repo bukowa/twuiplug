@@ -52,7 +52,10 @@ Take anything in this documentation as "probably":
 
 - `HorizontalList`
   ```
-  - <i>5</i><!-- mystery4 --> <<<<<<< number of rows
+  <i>5</i><!-- mystery4 --> <<<<<<< number of rows
+  ```
+  ```
+  <i>0</i><!-- mystery1 --> <<<<<< spacing in pixels between elements
   ```
 
 - `List`
