@@ -55,9 +55,12 @@ Take anything in this documentation as "probably":
   <i>5</i><!-- mystery4 --> <<<<<<< number of rows
   ```
   ```
-  <i>0</i><!-- mystery1 --> <<<<<< spacing in pixels between elements
+  <i>0</i><!-- mystery1 --> <<<<<< spacing in pixels between elements <right left>
   ```
-
+  ```
+  <i>0</i><!-- mystery2 --> <<<<<< spacing in pixels between elements <top bottom>
+  ```
+  
 - `List`
   ```
   - <i>10</i><!-- mystery4 --> <<<<<<<<<< number of columns
