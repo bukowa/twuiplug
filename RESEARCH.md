@@ -60,7 +60,12 @@ Take anything in this documentation as "probably":
   ```
   <i>0</i><!-- mystery2 --> <<<<<< spacing in pixels between elements <top bottom>
   ```
-  
+  ```
+  <yes /><!-- mystery5 -->  <<<<<< another spacing, changed from < no to yes > see below
+  ```
+  ![beforemyst5.png](./research/beforemyst5.png)
+  ![aftermyst5.png](./research/aftermyst5.png)
+
 - `List`
   ```
   - <i>10</i><!-- mystery4 --> <<<<<<<<<< number of columns
