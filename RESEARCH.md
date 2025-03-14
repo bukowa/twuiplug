@@ -42,11 +42,13 @@ Take anything in this documentation as "probably":
   ```
 
 - makes parent resize to fit this component (if set to yes and 1)
-  this for ex. I used in changing main menu campaign buttons for factions to fit 
+  this for ex. I used in changing main menu campaign buttons for factions to fit
   ```
   <yes /><!-- uientry flag 2 -->
   <byte>1</byte><!-- uientry flag 3 -->
   ```
+  flag 3 when set to 0 does not resize children below it 
+  (see when 0 set on Details - Requires does not scale below) ![./research/img1.png](./research/img1.png)
 
 - `HorizontalList`
   ```
