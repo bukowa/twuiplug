@@ -92,7 +92,23 @@ Take anything in this documentation as "probably":
   ```
 
 - this when removed on encyclopedia building info adds strange glow around edges of the window
+  *this is shader related flag*:
   ```
   <flt>10.0</flt><!-- margin top-bottom? -->
   <flt>10.0</flt><!-- margin left-right? -->
   ```
+
+- resizes text to fit for ex:
+  - ![./research/byte1.png](./research/byte1.png)
+    ```
+    <no /><!-- uientry flag 1 -->
+    <no /><!-- uientry flag 2 -->
+    <byte>0</byte><!-- uientry flag 3 -->
+    ```
+  
+  - ![./research/byte0.png](./research/byte0.png)
+    ```
+    <no /><!-- uientry flag 1 -->
+    <no /><!-- uientry flag 2 -->
+    <byte>1</byte><!-- uientry flag 3 -->
+    ```
